@@ -6,8 +6,9 @@
 #' @param cpue Numeric vector of CPUE values. If `catch` and `effort` are
 #'   provided, this is computed automatically.
 #' @param area_swept Numeric vector of area swept (e.g., **km^2^**)
-#' @inheritParams cpue
-#' @inheritDotParams cpue -catch -effort
+#' @param catch Numeric vector of catch (e.g., kg).
+#' @inheritParams cpue.numeric
+#' @inheritDotParams cpue.numeric -effort
 #'
 #' @return A numeric vector of biomass index values
 #'
@@ -38,12 +39,12 @@
 #'   method = "log"
 #' )
 biomass_index <- function(
-    cpue = NULL,
-    area_swept,
-    catch = NULL,
-    effort = NULL,
-    verbose = getOption("fishr.verbose", default = FALSE),
-    ...
+  cpue = NULL,
+  area_swept,
+  catch = NULL,
+  effort = NULL,
+  verbose = getOption("fishr.verbose", default = FALSE),
+  ...
 ) {
   rlang::check_dots_used()
 

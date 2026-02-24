@@ -3,7 +3,23 @@
 #' Calculates CPUE from catch and effort data, with optional gear
 #' standardization. Supports ratio and log-transformed methods.
 #'
-#' @param catch Numeric vector of catch (e.g., kg)
+#' @param x Input data: a numeric vector of catch values, or a data frame
+#'   containing catch and effort columns.
+#' @param ... Additional arguments passed to methods.
+#'
+#' @export
+cpue <- function(x, ...) {
+  UseMethod("cpue")
+}
+
+#' @rdname cpue
+#' @export
+cpue.default <- function(x, ...) {
+  stop("Unsupported input type for cpue(): ", class(x), call. = FALSE)
+}
+
+#' @rdname cpue
+#'
 #' @param effort Numeric vector of effort (e.g., hours)
 #' @param gear_factor Numeric scalar for gear standardization (default 1)
 #' @param method Character; one of `"ratio"` (default) or `"log"`.
@@ -16,33 +32,65 @@
 #' @examples
 #' cpue(100, 10)
 #' cpue(c(100, 200), c(10, 20), method = "log")
-cpue <- function(
-    catch,
-    effort,
-    gear_factor = 1,
-    method = c("ratio", "log"),
-    verbose = getOption("fishr.verbose", FALSE)
+cpue.numeric <- function(
+  x,
+  effort,
+  gear_factor = 1,
+  method = c("ratio", "log"),
+  verbose = getOption("fishr.verbose", FALSE),
+  ...
 ) {
   method <- match.arg(method)
 
-  validate_numeric_inputs(catch = catch, effort = effort)
+  validate_numeric_inputs(x = x, effort = effort)
 
   if (verbose) {
-    message("Processing ", length(catch), " records using ", method, " method")
+    message("Processing ", length(x), " records using ", method, " method")
   }
 
   raw_cpue <- switch(
     method,
-    ratio = catch / effort,
-    log = log(catch / effort)
+    ratio = x / effort,
+    log = log(x / effort)
   )
 
-  result <- raw_cpue * gear_factor
   new_cpue_result(
-    cpue_values = result,
+    cpue_values = raw_cpue * gear_factor,
     method = method,
     gear_factor = gear_factor,
-    n_records = length(catch)
+    n_records = length(x)
+  )
+}
+
+#' @rdname cpue
+#' @param catch_col Name of the catch column (default `"catch"`).
+#' @param effort_col Name of the effort column (default `"effort"`).
+#' @export
+cpue.data.frame <- function(
+  x,
+  catch_col = "catch",
+  effort_col = "effort",
+  gear_factor = 1,
+  method = c("ratio", "log"),
+  verbose = getOption("fishr.verbose", FALSE),
+  ...
+) {
+  if (!catch_col %in% names(x)) {
+    stop("Column '", catch_col, "' not found in data frame.", call. = FALSE)
+  }
+  if (!effort_col %in% names(x)) {
+    stop("Column '", effort_col, "' not found in data frame.", call. = FALSE)
+  }
+
+  # We can then call the numeric method by extracting the relevant columns and passing them to cpue() again.
+  # This way we reuse the existing logic and maintain a single source of truth for the CPUE calculation.
+  cpue(
+    x = x[[catch_col]],
+    effort = x[[effort_col]],
+    gear_factor = gear_factor,
+    method = method,
+    verbose = verbose,
+    ...
   )
 }
 

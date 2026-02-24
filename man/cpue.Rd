@@ -2,18 +2,39 @@
 % Please edit documentation in R/cpue.R
 \name{cpue}
 \alias{cpue}
+\alias{cpue.default}
+\alias{cpue.numeric}
+\alias{cpue.data.frame}
 \title{Calculate Catch Per Unit Effort (CPUE)}
 \usage{
-cpue(
-  catch,
+cpue(x, ...)
+
+\method{cpue}{default}(x, ...)
+
+\method{cpue}{numeric}(
+  x,
   effort,
   gear_factor = 1,
   method = c("ratio", "log"),
-  verbose = getOption("fishr.verbose", FALSE)
+  verbose = getOption("fishr.verbose", FALSE),
+  ...
+)
+
+\method{cpue}{data.frame}(
+  x,
+  catch_col = "catch",
+  effort_col = "effort",
+  gear_factor = 1,
+  method = c("ratio", "log"),
+  verbose = getOption("fishr.verbose", FALSE),
+  ...
 )
 }
 \arguments{
-\item{catch}{Numeric vector of catch (e.g., kg)}
+\item{x}{Input data: a numeric vector of catch values, or a data frame
+containing catch and effort columns.}
+
+\item{...}{Additional arguments passed to methods.}
 
 \item{effort}{Numeric vector of effort (e.g., hours)}
 
@@ -23,6 +44,10 @@ cpue(
 
 \item{verbose}{Logical; print processing info? Default from
 \code{getOption("fishr.verbose", FALSE)}.}
+
+\item{catch_col}{Name of the catch column (default \code{"catch"}).}
+
+\item{effort_col}{Name of the effort column (default \code{"effort"}).}
 }
 \value{
 A numeric vector of CPUE values

@@ -1,6 +1,6 @@
 test_that("cpue calculates simple ratio correctly", {
-  expect_equal(as.numeric(cpue(catch = 100, effort = 10)), 10)
-  expect_equal(as.numeric(cpue(catch = 50, effort = 2)), 25)
+  expect_equal(as.numeric(cpue(x = 100, effort = 10)), 10)
+  expect_equal(as.numeric(cpue(x = 50, effort = 2)), 25)
 })
 
 test_that("cpue handles vectors of data", {
@@ -14,19 +14,19 @@ test_that("cpue handles vectors of data", {
 test_that("gear_factor standardization scales correctly", {
   expect_equal(
     as.numeric(
-      cpue(catch = 100, effort = 10, gear_factor = 0.5)
+      cpue(x = 100, effort = 10, gear_factor = 0.5)
     ),
     5
   )
 
   expect_equal(
-    cpue(catch = 100, effort = 10),
-    cpue(catch = 100, effort = 10, gear_factor = 1)
+    cpue(x = 100, effort = 10),
+    cpue(x = 100, effort = 10, gear_factor = 1)
   )
 })
 
 test_that("cpue handles zero catch and missing data", {
-  expect_equal(as.numeric(cpue(catch = 0, effort = 10)), 0)
+  expect_equal(as.numeric(cpue(x = 0, effort = 10)), 0)
 
   expect_true(is.na(cpue(NA_real_, 10)))
   expect_true(is.na(cpue(100, NA_real_)))
@@ -69,7 +69,7 @@ test_that("cpue is silent by default", {
 
 test_that("cpue warns when vector lengths don't match", {
   expect_warning(
-    cpue(catch = c(100, 200, 300), effort = c(10, 20)),
+    cpue(x = c(100, 200, 300), effort = c(10, 20)),
     "longer object length is not a multiple of shorter object length"
   )
 
@@ -85,7 +85,7 @@ test_that("cpue error message is informative", {
 
 test_that("cpue produces no warnings with valid input", {
   expect_snapshot(
-    cpue(catch = c(100, 200, 300), effort = c(10, 20))
+    cpue(x = c(100, 200, 300), effort = c(10, 20))
   )
 
   expect_no_warning(cpue(100, 10))
@@ -125,4 +125,33 @@ test_that("cpue_result carries calculation metadata", {
 test_that("print.cpue_result displays expected output", {
   result <- cpue(c(100, 200, 300), c(10, 20, 15))
   expect_snapshot(print(result))
+})
+
+test_that("cpue.data.frame dispatches correctly", {
+  fishing_data <- data.frame(
+    catch = c(100, 200, 300),
+    effort = c(10, 20, 15)
+  )
+  result <- cpue(fishing_data)
+  expect_s3_class(result, "cpue_result")
+  expect_equal(as.numeric(result), c(10, 10, 20))
+})
+
+test_that("cpue.data.frame works with custom column names", {
+  trawl_data <- data.frame(
+    kg = c(50, 100),
+    hours = c(5, 10)
+  )
+  result <- cpue(trawl_data, catch_col = "kg", effort_col = "hours")
+  expect_s3_class(result, "cpue_result")
+  expect_equal(as.numeric(result), c(10, 10))
+})
+
+test_that("cpue.data.frame errors on missing columns", {
+  df <- data.frame(x = 1, y = 2)
+  expect_snapshot(cpue(df), error = TRUE)
+})
+
+test_that("cpue.default gives informative error", {
+  expect_snapshot(cpue("not valid"), error = TRUE)
 })

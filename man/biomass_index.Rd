@@ -19,7 +19,7 @@ provided, this is computed automatically.}
 
 \item{area_swept}{Numeric vector of area swept (e.g., \strong{km^2^})}
 
-\item{catch}{Numeric vector of catch (e.g., kg)}
+\item{catch}{Numeric vector of catch (e.g., kg).}
 
 \item{effort}{Numeric vector of effort (e.g., hours)}
 
@@ -27,8 +27,10 @@ provided, this is computed automatically.}
 \code{getOption("fishr.verbose", FALSE)}.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=cpue]{cpue}}
+  Arguments passed on to \code{\link[=cpue.numeric]{cpue.numeric}}
   \describe{
+    \item{\code{x}}{Input data: a numeric vector of catch values, or a data frame
+containing catch and effort columns.}
     \item{\code{gear_factor}}{Numeric scalar for gear standardization (default 1)}
     \item{\code{method}}{Character; one of \code{"ratio"} (default) or \code{"log"}.}
   }}
