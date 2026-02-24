@@ -1,3 +1,12 @@
+# cpue provides informative message when verbose
+
+    Code
+      cpue(c(100, 200), c(10, 20), verbose = TRUE)
+    Message
+      Processing 2 records using ratio method
+    Output
+      [1] 10 10
+
 # cpue error message is informative
 
     Code

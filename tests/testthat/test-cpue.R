@@ -52,9 +52,8 @@ test_that("cpue returns numeric vector", {
 })
 
 test_that("cpue provides informative message when verbose", {
-  expect_message(
-    cpue(c(100, 200), c(10, 20), verbose = TRUE),
-    "Processing 2 records"
+  expect_snapshot(
+    cpue(c(100, 200), c(10, 20), verbose = TRUE)
   )
 })
 
