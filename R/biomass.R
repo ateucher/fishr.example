@@ -47,5 +47,7 @@ biomass_index <- function(
     stop("Must provide either 'cpue' or both 'catch' and 'effort'.")
   }
 
+  validate_numeric_inputs(cpue = cpue, area_swept = area_swept)
+
   cpue * area_swept
 }

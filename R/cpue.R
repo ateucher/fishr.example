@@ -25,6 +25,8 @@ cpue <- function(
 ) {
   method <- match.arg(method)
 
+  validate_numeric_inputs(catch = catch, effort = effort)
+
   if (verbose) {
     message("Processing ", length(catch), " records using ", method, " method")
   }
