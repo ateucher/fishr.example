@@ -12,8 +12,8 @@
     Code
       cpue("not a number", 10)
     Condition
-      Error in `catch / effort`:
-      ! non-numeric argument to binary operator
+      Error:
+      ! 'catch' must be numeric, got character.
 
 # cpue produces no warnings with valid input
 
