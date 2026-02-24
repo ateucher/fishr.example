@@ -3,14 +3,16 @@ gear_types <- data.frame(
     "nordic_gillnet",
     "sinking_longline",
     "fyke_net",
-    "electrofishing"
+    "electrofishing",
+    "trap_net"
   ),
-  gear_factor = c(1.0, 0.72, 1.35, 0.45),
+  gear_factor = c(1.0, 0.72, 1.35, 0.45, 1.1),
   description = c(
     "Nordic multi-mesh gillnet (standard reference gear)",
     "Sinking baited longline",
     "Passive fyke net trap",
-    "Electrofishing unit"
+    "Electrofishing unit",
+    "Fancy trap net 2000"
   ),
   stringsAsFactors = FALSE
 )
