@@ -17,7 +17,7 @@ biomass_index(
 \item{cpue}{Numeric vector of CPUE values. If \code{catch} and \code{effort} are
 provided, this is computed automatically.}
 
-\item{area_swept}{Numeric vector of area swept (e.g., km²)}
+\item{area_swept}{Numeric vector of area swept (e.g., \strong{km^2^})}
 
 \item{catch}{Numeric vector of catch (e.g., kg)}
 
@@ -38,7 +38,16 @@ A numeric vector of biomass index values
 }
 \description{
 Calculates biomass index from CPUE and area swept. Can optionally
-compute CPUE from catch and effort data.
+compute CPUE from catch and effort data. See \code{\link[=cpue]{cpue()}} for details.
+}
+\details{
+Two modes of use:
+\itemize{
+\item Provide \code{cpue} directly for a simple calculation.
+\item Provide \code{catch} and \code{effort} to compute CPUE first, then scale by area.
+}
+
+Any additional arguments in \code{...} are forwarded to \code{\link[=cpue]{cpue()}}.
 }
 \examples{
 # From pre-computed CPUE
@@ -54,4 +63,7 @@ biomass_index(
   effort = c(10, 20),
   method = "log"
 )
+}
+\seealso{
+\code{\link[=cpue]{cpue()}} to compute CPUE values from raw catch and effort.
 }
