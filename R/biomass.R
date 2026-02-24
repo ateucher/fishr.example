@@ -10,6 +10,8 @@
 #'   CPUE is computed via `cpue()`.
 #' @param effort Optional numeric vector of effort. Required if `catch` is
 #'   provided.
+#' @param verbose Logical; print processing info? Default from
+#'   `getOption("fishr.verbose", FALSE)`.
 #' @param ... Additional arguments passed to `cpue()` when computing from
 #'   catch and effort (e.g., `method`, `gear_factor`).
 #'
@@ -35,12 +37,13 @@ biomass_index <- function(
     area_swept,
     catch = NULL,
     effort = NULL,
+    verbose = getOption("fishr.verbose", default = FALSE),
     ...
 ) {
   rlang::check_dots_used()
 
   if (is.null(cpue) && (!is.null(catch) && !is.null(effort))) {
-    cpue <- cpue(catch, effort, ...)
+    cpue <- cpue(catch, effort, verbose = verbose, ...)
   }
 
   if (is.null(cpue)) {
@@ -48,6 +51,10 @@ biomass_index <- function(
   }
 
   validate_numeric_inputs(cpue = cpue, area_swept = area_swept)
+
+  if (verbose) {
+    message("calculating biomass index for ", length(area_swept), " records")
+  }
 
   cpue * area_swept
 }
