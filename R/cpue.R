@@ -1,11 +1,13 @@
 #' Calculate Catch Per Unit Effort (CPUE)
 #'
-#' Calculates CPUE from catch and effort data, with optional gear standardization.
+#' Calculates CPUE from catch and effort data, with optional gear
+#' standardization. Supports ratio and log-transformed methods.
 #'
 #' @param catch Numeric vector of catch (e.g., kg)
 #' @param effort Numeric vector of effort (e.g., hours)
-#' @param gear_factor Numeric adjustment for gear standardization (default is 1)
-#' @param verbose Logical indicating whether to print processing messages.Default from
+#' @param gear_factor Numeric scalar for gear standardization (default 1)
+#' @param method Character; one of `"ratio"` (default) or `"log"`.
+#' @param verbose Logical; print processing info? Default from
 #'   `getOption("fishr.verbose", FALSE)`.
 #'
 #' @return A numeric vector of CPUE values
@@ -13,18 +15,25 @@
 #'
 #' @examples
 #' cpue(100, 10)
-#' cpue(100, 10, gear_factor = 0.5)
+#' cpue(c(100, 200), c(10, 20), method = "log")
 cpue <- function(
     catch,
     effort,
     gear_factor = 1,
-    verbose = getOption("fishr.verbose", default = FALSE)
+    method = c("ratio", "log"),
+    verbose = getOption("fishr.verbose", FALSE)
 ) {
+  method <- match.arg(method)
+
   if (verbose) {
-    message("Processing ", length(catch), " records")
+    message("Processing ", length(catch), " records using ", method, " method")
   }
 
-  raw_cpue <- catch / effort
+  raw_cpue <- switch(
+    method,
+    ratio = catch / effort,
+    log = log(catch / effort)
+  )
 
   raw_cpue * gear_factor
 }
