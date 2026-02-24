@@ -14,9 +14,9 @@ test_that("cpue handles vectors of data", {
 test_that("gear_factor standardization scales correctly", {
   expect_equal(
     as.numeric(
-      cpue(x = 100, effort = 10, gear_factor = 0.5)
+      cpue(x = 100, effort = 10, gear_type = "sinking_longline")
     ),
-    5
+    7.2
   )
 
   expect_equal(
