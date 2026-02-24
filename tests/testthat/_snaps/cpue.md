@@ -5,7 +5,11 @@
     Message
       Processing 2 records using ratio method
     Output
-      [1] 10 10
+      Survey Result
+      Records: 2 
+      Gear factor: 1 
+      Method: ratio 
+      CPUE values: 10 10 
 
 # cpue error message is informative
 
@@ -23,7 +27,11 @@
       Warning in `catch / effort`:
       longer object length is not a multiple of shorter object length
     Output
-      [1] 10 10 30
+      Survey Result
+      Records: 3 
+      Gear factor: 1 
+      Method: ratio 
+      CPUE values: 10 10 30 
 
 # cpue uses verbosity when option set to TRUE
 
@@ -32,5 +40,20 @@
     Message
       Processing 1 records using ratio method
     Output
-      [1] 10
+      Survey Result
+      Records: 1 
+      Gear factor: 1 
+      Method: ratio 
+      CPUE values: 10 
+
+# print.cpue_result displays expected output
+
+    Code
+      print(result)
+    Output
+      Survey Result
+      Records: 3 
+      Gear factor: 1 
+      Method: ratio 
+      CPUE values: 10 10 20 
 
